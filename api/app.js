@@ -2,6 +2,7 @@
 
 // load modules
 const express = require("express");
+const cors = require("cors");
 const morgan = require("morgan");
 const userRoutes = require("./routes/user");
 const courseRoutes = require("./routes/course");
@@ -27,6 +28,9 @@ const app = express();
 
 //set parse to json
 app.use(express.json());
+
+// setup cors
+app.use(cors());
 
 // setup morgan which gives us http request logging
 app.use(morgan("dev"));
