@@ -15,8 +15,8 @@ function App() {
       <Header />
       <Switch>
         <Redirect exact path="/" to="/courses" />
+        <Route path="/courses/:id" component={CourseDetail} />
         <Route path="/courses" component={Courses} />
-        <Route path="/:id" component={CourseDetail} />
       </Switch>
     </Router>
   );

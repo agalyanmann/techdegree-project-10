@@ -1,15 +1,17 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { DisplayCourseDetail } from "./DisplayCourseDetail";
 
 export const CourseDetail = () => {
   const [course, setCourse] = useState();
-  const courseID = window.location.pathname.slice(1);
+  const courseID = window.location.pathname.split("/courses/")[1];
+  const endpoint = `http://localhost:5000/api/courses/${courseID}`;
   let courseDetail;
 
-  const getData = async function getCourseData(id) {
+  const getData = async function getCourseData() {
     try {
-      const response = await axios(`http://localhost:5000/api/courses/${id}`);
+      const response = await axios(endpoint);
       setCourse(response.data);
     } catch (err) {
       console.error(err);
@@ -17,8 +19,20 @@ export const CourseDetail = () => {
   };
 
   useEffect(() => {
-    getData(courseID);
+    getData();
   }, []);
+
+  const clickHandler = async function handlerToDeleteCourse() {
+    try {
+      let history = useHistory();
+      const response = await axios.delete(endpoint);
+      const { data, status } = response;
+      if (status !== 204) throw new Error(data);
+      history.push("/courses");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   if (course) {
     courseDetail = <DisplayCourseDetail course={course} />;
@@ -31,7 +45,7 @@ export const CourseDetail = () => {
           <a className="button" href="update-course.html">
             Update Course
           </a>
-          <a className="button" href="#">
+          <a className="button" onClick={clickHandler}>
             Delete Course
           </a>
           <a className="button button-secondary" href="index.html">
