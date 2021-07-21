@@ -7,6 +7,7 @@ export const CourseDetail = () => {
   const [course, setCourse] = useState();
   const courseID = window.location.pathname.split("/courses/")[1];
   const endpoint = `http://localhost:5000/api/courses/${courseID}`;
+  let history = useHistory();
   let courseDetail;
 
   const getData = async function getCourseData() {
@@ -24,7 +25,6 @@ export const CourseDetail = () => {
 
   const clickHandler = async function handlerToDeleteCourse() {
     try {
-      let history = useHistory();
       const response = await axios.delete(endpoint);
       const { data, status } = response;
       if (status !== 204) throw new Error(data);
